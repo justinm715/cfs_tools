@@ -1,19 +1,17 @@
 ## Todo
 
-
 * Autosave form
 * Load form
 * Save form to file
 * Load form from file
-* Simple layout
 
 ---
 
+* ✅ Simple layout
 * ✅ github repo
-* ✅ Bootstrap
+* ✅ Tailwind CSS
 
 ---
-
 
 ## Developing
 
@@ -21,6 +19,16 @@
 npx tailwindcss -i ./src/styles/globals.css -o ./styles/globals.css --watch
 
 ```
+
+---
+
+## Resources
+
+* Forms
+  * [Formik](https://github.com/jaredpalmer/formik) - React form components
+  * [Formik-Persist-Values](https://github.com/kolengri/formik-persist-values) - Persist form data
+  * [Yup](https://github.com/jquense/yup) - Schema validation
+  * Formik [sample form](https://codesandbox.io/s/formik-v2-tutorial-final-ge1pt)
 
 ---
 

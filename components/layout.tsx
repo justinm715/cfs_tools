@@ -1,9 +1,9 @@
 import Navbar from './navbar'
 
-export default function Layout({children}) {
+export default function Layout({ children }) {
   return (
     <>
-      <div className="container mx-auto">
+      <div className="container mx-auto text-sm">
         <div className="border-b border-slate-500 mb-2.5 mt-2.5 pb-2.5">
           <h1 className="text-2xl">
             CFS Tools
@@ -15,7 +15,7 @@ export default function Layout({children}) {
         <div className="fixed w-[10rem] z-10">
           <Navbar />
         </div>
-        <div className="fixed pl-[10rem]">
+        <div className="pl-[10rem]">
           <main>{children}</main>
         </div>
       </div>
