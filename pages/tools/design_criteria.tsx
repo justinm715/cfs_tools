@@ -34,52 +34,36 @@ const MyTextInput = ({ label, ...props }) => {
 
 const DesignCriteria: NextPage = () => {
 
-  let loadedValues = false
-
   // https://stackoverflow.com/questions/59987391/how-to-set-initial-values-to-formik-using-axios-with-typescript
 
-  const [initialValues, setInitialValues] = useState(
-    {
-      projectName: '',
-      projectNumber: '',
-    }
-  )
+  const [initialValues, setInitialValues] = useState(null)
+  const [formInitialized, setFormInitialized] = useState(false)
 
-  const AutoSaveValues = () => {
-    if (loadedValues == false) {
-      if (typeof window !== 'undefined') {
-        console.log('We are loaded!')
-        let storedValues = localStorage.getItem('designCriteria')
-        if (typeof storedValues != 'undefined') {
+  const AutoSaveValues = ({ name, ...props }) => {
+    const { values, submitForm } = useFormikContext();
+    // If the form has not been initialized, check if there are any values to
+    // load from local storage. If there are, load them into initial values.
+    // If the form had already been intialized, do an auto save: save the current values.
+    useEffect(() => {
+      if (typeof window !== 'undefined' && !formInitialized) {
+        console.log('Initializing. Accessing localStorage...')
+        let storedValues = localStorage.getItem(name)
+        if (typeof storedValues !== 'undefined') {
+          console.log('Found values. Setting initial values to:')
           setInitialValues(JSON.parse(storedValues) || {})
+          console.log(initialValues)
         }
+        setFormInitialized(true)
+        return // exit the useEffect function so we don't trigger saving
       }
-      loadedValues = true
-    } else {
-      // https://formik.org/docs/api/useFormikContext
-      const { values, submitForm } = useFormikContext();
-      useEffect(() => {
-        console.log("AutoSaveValues called with formik context:")
+      if (typeof window !== 'undefined' && formInitialized) {
+        console.log("Saving values:")
+        localStorage.setItem(name, JSON.stringify(values))
         console.log(values)
-        localStorage.setItem('designCriteria', JSON.stringify(values))
-      }, [values])
-    }
-
+      }
+    })
     return null
   }
-
-  /*
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      if (!loadedValues) {
-        console.log('We are loaded!')
-        let storedValues = localStorage.getItem('designCriteria')
-        if (typeof storedValues != 'undefined') {
-          setInitialValues(JSON.parse(storedValues) || {})
-        }
-      }
-    }
-  }, []) */
 
   return (
     <Layout>
@@ -108,9 +92,7 @@ const DesignCriteria: NextPage = () => {
           <div className="grid grid-cols-6">
             <MyTextInput label="Project Number" name="projectNumber" type="text" />
           </div>
-
-          {/* <PersistFormikValues name="designCriteria" /> */}
-          <AutoSaveValues />
+          <AutoSaveValues name="designCriteria" />
         </Form>
       </Formik>
 
