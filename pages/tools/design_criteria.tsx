@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { Formik, Form, useField, Field, FieldArray, useFormikContext } from "formik"
 import * as Yup from "yup"
 import { Menu } from '@headlessui/react'
-import { ChevronDownIcon, PlusSmIcon, XIcon } from '@heroicons/react/solid'
+import { ChevronDownIcon, PlusSmIcon, XIcon, PlusIcon } from '@heroicons/react/solid'
 
 
 const SimpleTextInput = ({ label, ...props }) => {
@@ -155,14 +155,14 @@ const DesignCriteria: NextPage = () => {
                         ]
                       }
                     )}
-                    className="inline-flex justify-center border bg-gray-200 border-gray-300 shadow-sm px-2 py-1 bg-white text-sm font-medium text-gray-700 hover:bg-gray-100">
+                    className="inline-flex justify-center border bg-gray-200 border-gray-300 shadow-sm px-2 py-1 bg-blue-100 text-sm font-medium text-gray-700 hover:bg-blue-200">
                     Add
                     <PlusSmIcon className="h-5 w-5 ml-2 -mr-1" />
                   </button>
 
                   <Menu as="div" className="relative inline-block text-left">
                     <div>
-                      <Menu.Button className="inline-flex justify-center w-full border bg-gray-200 border-gray-300 shadow-sm px-2 py-1 bg-white text-sm font-medium text-gray-700 hover:bg-gray-100 ">
+                      <Menu.Button className="inline-flex justify-center w-full border bg-gray-200 border-gray-300 shadow-sm px-2 py-1 bg-blue-100 text-sm font-medium text-gray-700 hover:bg-blue-200 ">
                         Add Preset
                         <ChevronDownIcon className="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
                       </Menu.Button>
@@ -204,34 +204,75 @@ const DesignCriteria: NextPage = () => {
                     </Menu.Items>
                   </Menu>
 
-                  <div className="pt-2">
+                  <div className="pt-2 my-3 w-96">
                     {props.values.wallAssemblies && props.values.wallAssemblies.length > 0 ? (
                       props.values.wallAssemblies.map((wallAssembly, assemblyIndex) => (
-                        <div className="mb-4">
-                          <Field name={`wallAssemblies[${assemblyIndex}].name`} as="input" className="border-b border-b-gray-500 block w-80" />
+                        <div className="mb-4 p-2 border">
+                          <Field name={`wallAssemblies[${assemblyIndex}].name`} as="input" className="border-b border-b-gray-500 w-80" />
+
+                          { /* Delete Wall Assembly */}
+                          <button className="float-right" onClick={() => { arrayHelpers.remove(assemblyIndex) }}>
+                            <XIcon className="h-3 w-3 text-red-400" aria-hidden="true" />
+                          </button>
+
                           <FieldArray name={`wallAssemblies[${assemblyIndex}].parts`}
                             render={
                               partArrayHelpers => (
-                                <>
-                                  {wallAssembly.parts && wallAssembly.parts.length > 0 ? (
-                                    wallAssembly.parts.map((wallAssemblyPart, partIndex) => (
-                                      <div className="block ml-4">
-                                        <Field
-                                          name={`wallAssemblies[${assemblyIndex}].parts[${partIndex}].description`} as="input" className="border-b border-b-gray-400 mr-3"
-                                        />
-                                        <Field
-                                          name={`wallAssemblies[${assemblyIndex}].parts[${partIndex}].weight`} as="input" className="border-b border-b-gray-400 w-8"
-                                        /> lbs/sq ft
-                                        <button
-                                          onClick={()=>{}}
-                                        >
-                                          <XIcon className="-mr-1 ml-2 h-3 w-3 text-red-400" aria-hidden="true" />
-                                        </button>
-                                      </div>
-                                    ))
+                                <div className="block ml-4 mt">
+                                  {console.log("Rendering")}
+                                  {console.log(wallAssembly)}
+                                  {console.log(wallAssembly.parts && wallAssembly.parts.length > 0)}
+                                  {console.log(wallAssembly.parts && wallAssembly.parts.length > 0 ? "parts ok" : "parts not ok")}
+                                  {wallAssembly.parts && wallAssembly.parts.length > 0 ? (wallAssembly.parts.map((wallAssemblyPart, partIndex) => (
 
-                                  ) : "This assembly has no parts. Why don't you add some?"}
-                                </>
+                                    <div key={partIndex}>
+
+                                      { /* Part name and weight (lbs/sq ft) */}
+
+                                      <Field
+                                        name={`wallAssemblies[${assemblyIndex}].parts[${partIndex}].description`} as="input" className="border-b border-b-gray-400 mr-3 w-48" placeholder="Unnamed Part"
+                                      />
+
+                                      <Field
+                                        name={`wallAssemblies[${assemblyIndex}].parts[${partIndex}].weight`} as="input" className="border-b border-b-gray-400 w-8" placeholder="0"
+                                      /> lbs/sq ft
+
+                                      { /* Delete Part */}
+                                      <button onClick={() => { partArrayHelpers.remove(partIndex) }}>
+                                        <XIcon className="-mr-1 ml-2 h-3 w-3 text-red-400" aria-hidden="true" />
+                                      </button>
+
+                                    </div>
+
+                                  ))) : (
+                                    <div>
+                                      This assembly has no parts.
+                                    </div>
+                                  )}
+
+
+                                  { /* Sum part weights and show total */}
+                                  {wallAssembly.parts && wallAssembly.parts.length > 0 ? (
+                                    <div className="block">
+                                      <span className="inline-block w-48 mr-3">Total</span>
+                                      <span className="inline-block w-8">
+                                        {
+                                          wallAssembly
+                                            .parts.map((p) => { return Number(p.weight) })
+                                            .reduce((prev, cur) => { return prev + (cur || 0) })
+                                            .toFixed(2)}
+                                      </span>
+                                    </div>
+                                  ) : ""}
+
+                                  { /* Add part */}
+                                  <button className="text-sm border px-2 mt-2 bg-blue-100 hover:bg-blue-200"
+                                    onClick={
+                                      () => (partArrayHelpers.push({}))}
+                                  >
+                                    Add Part <PlusIcon className="h-3 w-3 ml-1 -mt-1 inline" aria-hidden="true" />
+                                  </button>
+                                </div>
                               )
                             }
                           />
