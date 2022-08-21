@@ -1,15 +1,18 @@
 ## Todo
 
-* Autosave form
-* Load form
+
+* seismic parameters
 * Save form to file
 * Load form from file
 
 ---
 
+* ✅ Autosave form
+* ✅ Load form
 * ✅ Simple layout
 * ✅ github repo
 * ✅ Tailwind CSS
+* ✅ deflection criteria for wall assembly
 
 ---
 
