@@ -8,7 +8,7 @@ import * as Yup from "yup"
 import { Menu } from '@headlessui/react'
 import { ChevronDownIcon, PlusSmIcon, XIcon, PlusIcon } from '@heroicons/react/solid'
 
-import { FpChart } from './_utils'
+import { FpChart, saveProjectToFile, loadProjectFromFile, handleLoadProjectFromFile } from './_utils'
 
 
 const SimpleTextInput = ({ label, ...props }) => {
@@ -56,9 +56,7 @@ const DesignCriteria: NextPage = () => {
 
   // https://stackoverflow.com/questions/59987391/how-to-set-initial-values-to-formik-using-axios-with-typescript
 
-  const [initialValues, setInitialValues] = useState({
-    projectName: 'Test Project'
-  })
+  const [initialValues, setInitialValues] = useState({})
   const [formInitialized, setFormInitialized] = useState(false)
 
   function classNames(...classes) {
@@ -93,6 +91,10 @@ const DesignCriteria: NextPage = () => {
 
   return (
     <Layout>
+      <Head>
+        <title>Design Criteria</title>
+      </Head>
+      
       <Formik
         initialValues={initialValues}
         enableReinitialize={true}
@@ -105,14 +107,22 @@ const DesignCriteria: NextPage = () => {
             }
           )
         }
-      /*onSubmit={
+      onSubmit={
         async () => {
  
         }
-      }*/
+      }
       >
         {props => (
           <Form>
+            <div className="mb-8">
+              <button onClick={saveProjectToFile} className="px-2 py-1 border border-gray-400 bg-blue-100">Save</button>
+              <button onClick={loadProjectFromFile} className="px-2 py-1 border border-gray-400 bg-blue-100">Loads</button>
+              <input id="file-input" onChange={handleLoadProjectFromFile} type="file" name="projectFile" accept=".json" className="hidden" />
+            </div>
+                        
+            <h2 className="text-2xl mb-8">Design Criteria</h2>
+
             <h3 className="font-bold">Project Meta</h3>
             <div className="grid grid-cols-6 py-1">
               <SimpleTextInput label="Project Name" name="projectName" />
@@ -146,6 +156,7 @@ const DesignCriteria: NextPage = () => {
               </div>
               <div >
                 <Field as="select" name="I_p" className="border border-gray-500 ml-1">
+                  <option></option>
                   <option value="1.0">1.0</option>
                   <option value="1.5">1.5</option>
                 </Field>

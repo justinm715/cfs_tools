@@ -1,12 +1,15 @@
 ## Todo
 
 
-* seismic parameters
-* Save form to file
-* Load form from file
+* schedules page
+* 
+
 
 ---
-
+* ✅ sSave form to file
+* ✅ sLoad form from file
+* ✅ seismic parameters
+* ✅ update page titles
 * ✅ Autosave form
 * ✅ Load form
 * ✅ Simple layout

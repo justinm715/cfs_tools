@@ -1,3 +1,59 @@
+import { saveAs } from 'file-saver'
+import { useEffect } from 'react';
+import Router from 'next/router'
+
+
+const saveProjectToFile = () => {
+  // https://github.com/eligrey/FileSaver.js/
+  console.log("Saving project to file...")
+  let data = {}
+  Object.keys(localStorage).forEach((key) => {
+    data[key] = localStorage.getItem(key)
+  })
+  data['__meta__'] = JSON.stringify({
+    "app" : "CFS Tools",
+    "author": "Justin Martinez",
+    "version": "0.1"
+  })
+  let blob = new Blob([JSON.stringify(data)], { type: "application/json"})
+  saveAs(blob, "CFS Tools Project.json")
+}
+
+const loadProjectFromFile = () => {
+  // https://developer.mozilla.org/en-US/docs/Web/API/File_API/Using_files_from_web_applications
+  console.log("Loading project from file")
+  let input = document.getElementById("file-input")
+  input.value = null
+  input.click()
+}
+
+const handleLoadProjectFromFile = (event) => {
+  console.log("Handling selected file...")
+  const reader = new FileReader()
+  reader.readAsText(event.target.files[0])
+  let data = {}
+  reader.onload = () => {
+    try {
+      data = JSON.parse(reader.result)
+      if (!("__meta__" in  data)) {
+        throw("Invalid file selected")
+      } else {
+        console.log("Found file contents")
+        localStorage.clear()
+        Object.keys(data).forEach((key) => {
+          console.log("Loading " + key)
+          localStorage.setItem(key, data[key])
+        })
+        // refresh the page
+        // https://flaviocopes.com/nextjs-force-page-refresh/
+        Router.reload(window.location.pathname)
+      }
+    } catch (e) {
+      alert("Invalid file selected")
+      console.log(e)
+    }
+  }
+}
 
 const FpChart = ({S_DS, I_p}) => {
   const zhIncrement = 0.05
@@ -98,4 +154,4 @@ const FpChart = ({S_DS, I_p}) => {
   )
 }
 
-export { FpChart }
+export { FpChart, saveProjectToFile, loadProjectFromFile, handleLoadProjectFromFile }

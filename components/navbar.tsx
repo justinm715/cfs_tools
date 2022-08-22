@@ -31,6 +31,11 @@ export default function Navbar() {
             <a className="block pl-2 border-l border-l-slate-500 hover:border-l-sky-500">Design Criteria</a>
           </Link>
         </li>
+        <li className={router.pathname == "/tools/interior_schedules" ? "text-sky-600" : ""}>
+          <Link href="/tools/interior_schedules">
+            <a className="block pl-2 border-l border-l-slate-500 hover:border-l-sky-500">Interior Schedules</a>
+          </Link>
+        </li>
       </ul>
     </>
   )
