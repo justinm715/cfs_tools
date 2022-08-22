@@ -15,14 +15,14 @@ const SimpleTextInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
   return (
     <>
-      <div className="mb-1">
+      <div className="mb-1 col-span-1">
         <label htmlFor={props.id || props.name}>{label}</label>
       </div>
-      <div>
+      <div className="col-span-1">
         <input
-          className="text-input border border-gray-500 ml-1" {...field} {...props} />
+          className="text-input border border-gray-500 ml-1 w-32" {...field} {...props} />
       </div>
-      <div>
+      <div className="col-span-2">
         {meta.touched && meta.error ? (
           <span className="text-red-500">{meta.error}</span>
         ) : null}
@@ -116,8 +116,8 @@ const DesignCriteria: NextPage = () => {
         {props => (
           <Form>
             <div className="mb-8">
-              <button onClick={saveProjectToFile} className="px-2 py-1 border border-gray-400 bg-blue-100">Save</button>
-              <button onClick={loadProjectFromFile} className="px-2 py-1 border border-gray-400 bg-blue-100">Loads</button>
+              <button onClick={saveProjectToFile} className="px-2 py-1 border border-gray-400 bg-blue-100 mr-2">Save</button>
+              <button onClick={loadProjectFromFile} className="px-2 py-1 border border-gray-400 bg-blue-100">Load</button>
               <input id="file-input" onChange={handleLoadProjectFromFile} type="file" name="projectFile" accept=".json" className="hidden" />
             </div>
                         
@@ -171,7 +171,7 @@ const DesignCriteria: NextPage = () => {
                 <label htmlFor="S_DS">S<sub>DS</sub></label>
               </div>
               <div>
-                <Field className="text-input border border-gray-500 ml-1" name="S_DS" />
+                <Field className="text-input border border-gray-500 ml-1 w-32" name="S_DS" />
               </div>
               <div>
                 { (props.touched.S_DS && props.errors.S_DS) ? (

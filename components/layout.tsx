@@ -3,8 +3,8 @@ import Navbar from './navbar'
 export default function Layout({ children }) {
   return (
     <>
-      <div className="container mx-auto text-sm ">
-        <div className="border-b border-slate-500 mb-2.5 mt-2.5 pb-2.5">
+      <div className="container mx-auto text-sm min-w-[64rem] ">
+        <div className="border-b border-slate-500 m-3 pb-2.5">
           <h1 className="text-2xl">
             CFS Tools
           </h1>
@@ -12,11 +12,13 @@ export default function Layout({ children }) {
             By Justin Martinez
           </p>
         </div>
-        <div className="fixed w-[10rem] z-10">
-          <Navbar />
-        </div>
-        <div className="pl-[10rem] min-w-[55rem]">
-          <main>{children}</main>
+        <div className="grid grid-cols-12 m-3">
+          <div className="col-span-2">
+            <Navbar />
+          </div>
+          <div className="col-span-10">
+            <main>{children}</main>
+          </div>
         </div>
       </div>
     </>
