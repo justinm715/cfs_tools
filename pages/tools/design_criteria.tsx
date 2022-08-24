@@ -393,7 +393,7 @@ const DesignCriteria: NextPage = () => {
               * - Interior / Exterior
               */
             }
-            <AutoSaveValues name="designCriteria" stateHandlers={stateHandlers} />
+            <AutoSaveValues name="cfs_tools_project" stateHandlers={stateHandlers} />
           </Form>
         )
         }
