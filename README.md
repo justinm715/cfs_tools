@@ -1,12 +1,15 @@
 ## Todo
 
 
+
+* add key for li items
 * schedules page
 * 
 
 
 ---
-* ✅ sSave form to file
+* ✅ move autosave to utils
+* ✅ Save form to file
 * ✅ sLoad form from file
 * ✅ seismic parameters
 * ✅ update page titles

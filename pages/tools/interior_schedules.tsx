@@ -7,7 +7,11 @@ export default function About() {
       <Head>
         <title>Interior Schedules</title>
       </Head>
-      <p>This is interior schedules</p>
+
+      <h2 className="text-2xl mb-8">Interior Schedules</h2>
+
+      {/* List of wall types */}
+
     </Layout>
   )
 }

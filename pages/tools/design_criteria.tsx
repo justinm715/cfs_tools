@@ -8,7 +8,7 @@ import * as Yup from "yup"
 import { Menu } from '@headlessui/react'
 import { ChevronDownIcon, PlusSmIcon, XIcon, PlusIcon } from '@heroicons/react/solid'
 
-import { FpChart, saveProjectToFile, loadProjectFromFile, handleLoadProjectFromFile } from './_utils'
+import { AutoSaveValues, FpChart, saveProjectToFile, loadProjectFromFile, handleLoadProjectFromFile } from './_utils'
 
 
 const SimpleTextInput = ({ label, ...props }) => {
@@ -58,35 +58,15 @@ const DesignCriteria: NextPage = () => {
 
   const [initialValues, setInitialValues] = useState({})
   const [formInitialized, setFormInitialized] = useState(false)
+  const stateHandlers = {
+    initialValues: initialValues,
+    setInitialValues: setInitialValues,
+    formInitialized: formInitialized,
+    setFormInitialized: setFormInitialized
+  }
 
   function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
-  }
-
-  const AutoSaveValues = ({ name, ...props }) => {
-    const { values, submitForm } = useFormikContext();
-    // If the form has not been initialized, check if there are any values to
-    // load from local storage. If there are, load them into initial values.
-    // If the form had already been intialized, do an auto save: save the current values.
-    useEffect(() => {
-      if (typeof window !== 'undefined' && !formInitialized) {
-        console.log('Initializing. Accessing localStorage...')
-        let storedValues = localStorage.getItem(name)
-        if (typeof storedValues !== 'undefined') {
-          console.log('Found values. Setting initial values to:')
-          setInitialValues(JSON.parse(storedValues) || {})
-          console.log(initialValues)
-        }
-        setFormInitialized(true)
-        return // exit the useEffect function so we don't trigger saving
-      }
-      if (typeof window !== 'undefined' && formInitialized) {
-        console.log("Saving values:")
-        localStorage.setItem(name, JSON.stringify(values))
-        console.log(values)
-      }
-    })
-    return null
   }
 
   return (
@@ -94,7 +74,7 @@ const DesignCriteria: NextPage = () => {
       <Head>
         <title>Design Criteria</title>
       </Head>
-      
+
       <Formik
         initialValues={initialValues}
         enableReinitialize={true}
@@ -107,11 +87,11 @@ const DesignCriteria: NextPage = () => {
             }
           )
         }
-      onSubmit={
-        async () => {
- 
+        onSubmit={
+          async () => {
+
+          }
         }
-      }
       >
         {props => (
           <Form>
@@ -120,7 +100,7 @@ const DesignCriteria: NextPage = () => {
               <button onClick={loadProjectFromFile} className="px-2 py-1 border border-gray-400 bg-blue-100">Load</button>
               <input id="file-input" onChange={handleLoadProjectFromFile} type="file" name="projectFile" accept=".json" className="hidden" />
             </div>
-                        
+
             <h2 className="text-2xl mb-8">Design Criteria</h2>
 
             <h3 className="font-bold">Project Meta</h3>
@@ -147,7 +127,7 @@ const DesignCriteria: NextPage = () => {
               </div>
             </div>
 
-            { /* Seismic Parameters */ }
+            { /* Seismic Parameters */}
             <h3 className="font-bold border-t border-t-gray-300 mt-2 pt-2">Seismic Parameters</h3>
 
             <div className="grid grid-cols-6 py-1">
@@ -174,15 +154,15 @@ const DesignCriteria: NextPage = () => {
                 <Field className="text-input border border-gray-500 ml-1 w-32" name="S_DS" />
               </div>
               <div>
-                { (props.touched.S_DS && props.errors.S_DS) ? (
-                  <span className="text-red-500">{ props.errors.S_DS}</span>
+                {(props.touched.S_DS && props.errors.S_DS) ? (
+                  <span className="text-red-500">{props.errors.S_DS}</span>
                 ) : ""}
               </div>
             </div>
 
             <FpChart S_DS={props.values.S_DS} I_p={props.values.I_p} />
 
-            { /* Wall Assemblies */ }
+            { /* Wall Assemblies */}
             { /* https://tailwindui.com/components/application-ui/elements/dropdowns */}
             <h3 className="font-bold border-t border-t-gray-300 mt-2 pt-2 mb-2">Wall Assemblies</h3>
 
@@ -413,7 +393,7 @@ const DesignCriteria: NextPage = () => {
               * - Interior / Exterior
               */
             }
-            <AutoSaveValues name="designCriteria" />
+            <AutoSaveValues name="designCriteria" stateHandlers={stateHandlers} />
           </Form>
         )
         }

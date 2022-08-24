@@ -585,10 +585,6 @@ video {
   }
 }
 
-.fixed {
-  position: fixed;
-}
-
 .absolute {
   position: absolute;
 }
@@ -601,36 +597,20 @@ video {
   right: 0px;
 }
 
-.left-\[10em\] {
-  left: 10em;
-}
-
 .z-20 {
   z-index: 20;
-}
-
-.z-10 {
-  z-index: 10;
-}
-
-.col-span-4 {
-  grid-column: span 4 / span 4;
 }
 
 .col-span-1 {
   grid-column: span 1 / span 1;
 }
 
-.col-span-11 {
-  grid-column: span 11 / span 11;
-}
-
-.col-auto {
-  grid-column: auto;
-}
-
 .col-span-2 {
   grid-column: span 2 / span 2;
+}
+
+.col-span-4 {
+  grid-column: span 4 / span 4;
 }
 
 .col-span-10 {
@@ -639,10 +619,6 @@ video {
 
 .float-right {
   float: right;
-}
-
-.m-2 {
-  margin: 0.5rem;
 }
 
 .m-3 {
@@ -671,8 +647,8 @@ video {
   margin-bottom: 2rem;
 }
 
-.mr-1 {
-  margin-right: 0.25rem;
+.mr-2 {
+  margin-right: 0.5rem;
 }
 
 .mt-2 {
@@ -711,20 +687,8 @@ video {
   margin-right: 1rem;
 }
 
-.mb-2\.5 {
-  margin-bottom: 0.625rem;
-}
-
-.mt-2\.5 {
-  margin-top: 0.625rem;
-}
-
 .mb-3 {
   margin-bottom: 0.75rem;
-}
-
-.mr-2 {
-  margin-right: 0.5rem;
 }
 
 .block {
@@ -775,6 +739,10 @@ video {
   width: 9rem;
 }
 
+.w-32 {
+  width: 8rem;
+}
+
 .w-5 {
   width: 1.25rem;
 }
@@ -805,30 +773,6 @@ video {
 
 .w-8 {
   width: 2rem;
-}
-
-.w-\[10rem\] {
-  width: 10rem;
-}
-
-.w-16 {
-  width: 4rem;
-}
-
-.w-24 {
-  width: 6rem;
-}
-
-.w-32 {
-  width: 8rem;
-}
-
-.w-40 {
-  width: 10rem;
-}
-
-.min-w-\[55rem\] {
-  min-width: 55rem;
 }
 
 .min-w-\[64rem\] {
@@ -937,11 +881,6 @@ video {
   background-color: rgb(243 244 246 / var(--tw-bg-opacity));
 }
 
-.object-left {
-  -o-object-position: left;
-     object-position: left;
-}
-
 .p-3 {
   padding: 0.75rem;
 }
@@ -971,10 +910,6 @@ video {
 
 .pb-2 {
   padding-bottom: 0.5rem;
-}
-
-.pl-\[10rem\] {
-  padding-left: 10rem;
 }
 
 .pl-2 {
@@ -1090,24 +1025,4 @@ video {
 .focus\:outline-none:focus {
   outline: 2px solid transparent;
   outline-offset: 2px;
-}
-
-@media (min-width: 640px) {
-  .sm\:col-span-2 {
-    grid-column: span 2 / span 2;
-  }
-
-  .sm\:w-20 {
-    width: 5rem;
-  }
-
-  .sm\:w-10 {
-    width: 2.5rem;
-  }
-}
-
-@media (min-width: 768px) {
-  .md\:col-span-2 {
-    grid-column: span 2 / span 2;
-  }
 }
