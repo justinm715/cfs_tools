@@ -173,7 +173,7 @@ const FpChart = ({ S_DS, I_p }) => {
         </thead>
         <tbody className="text-center">
           {zhs.map((element, index) => (
-            <tr className="border-b border-b-gray-300 hover:bg-blue-100 even:bg-gray-100">
+            <tr className="border-b border-b-gray-300 hover:bg-blue-100 even:bg-gray-100" key={"z_" + element.toFixed(3)}>
               <td>{element.toFixed(3)}</td>
               <td className="w-36">{results["asce7-16_interior-walls"][index].toFixed(3)}</td>
               <td className="w-36">{results["asce7-16_exterior-body"][index].toFixed(3)}</td>

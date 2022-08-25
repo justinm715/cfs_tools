@@ -94,7 +94,7 @@ const DesignCriteria: NextPage = () => {
         }
       >
         {props => (
-          <Form>
+          <Form className="p-2">
             <div className="mb-8">
               <button onClick={saveProjectToFile} className="px-2 py-1 border border-gray-400 bg-blue-100 mr-2">Save</button>
               <button onClick={loadProjectFromFile} className="px-2 py-1 border border-gray-400 bg-blue-100">Load</button>
@@ -275,7 +275,7 @@ const DesignCriteria: NextPage = () => {
                     { /* Start Wall Assembly */}
                     {props.values.wallAssemblies && props.values.wallAssemblies.length > 0 ? (
                       props.values.wallAssemblies.map((wallAssembly, assemblyIndex) => (
-                        <div className="mb-4 p-3 border">
+                        <div className="mb-4 p-3 border" key={"assemblyIndex-" + assemblyIndex}>
                           <Field name={`wallAssemblies[${assemblyIndex}].name`} as="input" className="font-bold border-b border-b-gray-500 w-80" />
 
                           { /* Delete Wall Assembly */}

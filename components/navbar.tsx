@@ -6,7 +6,7 @@ export default function Navbar() {
   const router = useRouter()
 
   return (
-    <>
+    <div className="p-2">
       
       <h2 className="pb-2 font-bold ">Getting Started</h2>
       
@@ -37,6 +37,6 @@ export default function Navbar() {
           </Link>
         </li>
       </ul>
-    </>
+    </div>
   )
 }
