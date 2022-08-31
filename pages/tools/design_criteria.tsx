@@ -58,6 +58,8 @@ const DesignCriteria: NextPage = () => {
 
   const [initialValues, setInitialValues] = useState({})
   const [formInitialized, setFormInitialized] = useState(false)
+
+  // for <AutoSaveValues ... stateHandlers={stateHandlers} />
   const stateHandlers = {
     initialValues: initialValues,
     setInitialValues: setInitialValues,
@@ -212,7 +214,8 @@ const DesignCriteria: NextPage = () => {
                                     { description: "(1) 5/8\" Gypsum Board", weight: 2.5 }
                                   ],
                                   uniformLive: 5,
-                                  deflectionLimit: 240
+                                  deflectionLimit: 240,
+                                  UUID: crypto.randomUUID()
                                 })
                               }}
                             >
@@ -235,7 +238,8 @@ const DesignCriteria: NextPage = () => {
                                     { description: "(2) 5/8\" Gypsum Board", weight: 5.0 }
                                   ],
                                   uniformLive: 5,
-                                  deflectionLimit: 240
+                                  deflectionLimit: 240,
+                                  UUID: crypto.randomUUID()
                                 })
                               }}
                             >
@@ -258,7 +262,8 @@ const DesignCriteria: NextPage = () => {
                                     { description: "(1) 1\" Gypsum Board", weight: 4.0 }
                                   ],
                                   uniformLive: 5,
-                                  deflectionLimit: 240
+                                  deflectionLimit: 240,
+                                  UUID: crypto.randomUUID()
                                 })
                               }}
                             >
@@ -277,6 +282,7 @@ const DesignCriteria: NextPage = () => {
                       props.values.wallAssemblies.map((wallAssembly, assemblyIndex) => (
                         <div className="mb-4 p-3 border" key={"assemblyIndex-" + assemblyIndex}>
                           <Field name={`wallAssemblies[${assemblyIndex}].name`} as="input" className="font-bold border-b border-b-gray-500 w-80" />
+                          <Field name={`wallAssemblies[${assemblyIndex}].UUID`} as="hidden" />
 
                           { /* Delete Wall Assembly */}
                           <button className="float-right" onClick={() => { arrayHelpers.remove(assemblyIndex) }}>
@@ -393,7 +399,7 @@ const DesignCriteria: NextPage = () => {
               * - Interior / Exterior
               */
             }
-            <AutoSaveValues name="cfs_tools_project" stateHandlers={stateHandlers} />
+            <AutoSaveValues name="cfs_tools_design_criteria" stateHandlers={stateHandlers} />
           </Form>
         )
         }

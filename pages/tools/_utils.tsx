@@ -3,14 +3,17 @@ import { useEffect } from 'react';
 import Router from 'next/router'
 import { useFormikContext } from "formik"
 
+import { Field, FieldArray } from "formik"
 
-const AutoSaveValues = ({ name, stateHandlers, ...props }) => {
+import * as Helpers from './_helpers'
+
+export const AutoSaveValues = ({ name, stateHandlers, ...props }) => {
   const initialValues = stateHandlers['initialValues']
   const setInitialValues = stateHandlers['setInitialValues']
   const formInitialized = stateHandlers['formInitialized']
   const setFormInitialized = stateHandlers['setFormInitialized']
 
-  const { values, submitForm } = useFormikContext();
+  const { values, submitForm, setValues } = useFormikContext();
   // If the form has not been initialized, check if there are any values to
   // load from local storage. If there are, load them into initial values.
   // If the form had already been intialized, do an auto save: save the current values.
@@ -20,22 +23,25 @@ const AutoSaveValues = ({ name, stateHandlers, ...props }) => {
       let storedValues = localStorage.getItem(name)
       if (typeof storedValues !== 'undefined') {
         console.log('Found values. Setting initial values to:')
-        setInitialValues(JSON.parse(storedValues) || {})
+        let newValues = JSON.parse(storedValues) || {}
+        setInitialValues(newValues)
+        setValues(newValues)
         console.log(initialValues)
       }
       setFormInitialized(true)
       return // exit the useEffect function so we don't trigger saving
-    }
-    if (typeof window !== 'undefined' && formInitialized) {
+    } else if (typeof window !== 'undefined' && formInitialized) {
       console.log("Saving values:")
-      localStorage.setItem(name, JSON.stringify(values))
-      console.log(values)
+      if (Object.keys(values).length > 0) {
+        localStorage.setItem(name, JSON.stringify(values))
+        console.log(values)
+      }
     }
   })
   return null
 }
 
-const saveProjectToFile = () => {
+export const saveProjectToFile = () => {
   // https://github.com/eligrey/FileSaver.js/
   console.log("Saving project to file...")
   let data = {}
@@ -51,7 +57,7 @@ const saveProjectToFile = () => {
   saveAs(blob, "CFS Tools Project.json")
 }
 
-const loadProjectFromFile = () => {
+export const loadProjectFromFile = () => {
   // https://developer.mozilla.org/en-US/docs/Web/API/File_API/Using_files_from_web_applications
   console.log("Loading project from file")
   let input = document.getElementById("file-input")
@@ -59,7 +65,7 @@ const loadProjectFromFile = () => {
   input.click()
 }
 
-const handleLoadProjectFromFile = (event) => {
+export const handleLoadProjectFromFile = (event) => {
   console.log("Handling selected file...")
   const reader = new FileReader()
   reader.readAsText(event.target.files[0])
@@ -87,7 +93,7 @@ const handleLoadProjectFromFile = (event) => {
   }
 }
 
-const FpChart = ({ S_DS, I_p }) => {
+export const FpChart = ({ S_DS, I_p }) => {
   const zhIncrement = 0.05
   const zhs = Array(1 / zhIncrement + 1.0).fill().map((v, i) => i * zhIncrement).reverse();
   let results = {}
@@ -186,4 +192,20 @@ const FpChart = ({ S_DS, I_p }) => {
   )
 }
 
-export { AutoSaveValues, FpChart, saveProjectToFile, loadProjectFromFile, handleLoadProjectFromFile }
+export const AddNewInteriorSchedule = ({ wallAssemblies }) => {
+  return (
+    <Field as="select" name="new" className="border border-gray-400 py-1 mx-2 text-sm">
+      <option value="0" key="invalid-new-wall-assembly">Select a wall assembly...</option>
+      {wallAssemblies.map((wallAssembly, wallAssemblyIndex) => (
+        <option
+          value={wallAssembly.UUID}
+          key={"newWallAssembly-" + wallAssemblyIndex}
+        >
+          {wallAssembly.name} -
+          L/{wallAssembly.deflectionLimit},
+          {Helpers.sumWallAssemblyParts(wallAssembly).toFixed(2)} PSF
+        </option>
+      ))}
+    </Field>
+  )
+}

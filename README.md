@@ -1,6 +1,13 @@
+## Notes and Ideas
+
+### Schedules
+
+ * show list of schedules with last runs
+   * schedule is collapsible
+
+---
+
 ## Todo
-
-
 
 * add key for li items
 * schedules page
@@ -8,6 +15,14 @@
 
 
 ---
+
+ * ✅ fix interior schedules being reset on load of Interior Schedules page
+ * 🥶 replace select dropdown w/ button dropdown
+ * ✅ error, if there is no design criteria and wall assemblies, tell them to do it first
+ * ✅ maintain cfs_tools_interior_schedules state
+ * ✅ formik form for adding assemblies with dropdown
+   * ✅ adding an assembly schedule will add to the state
+   *  ✅ removing will remove from state
 * ✅ move autosave to utils
 * ✅ Save form to file
 * ✅ sLoad form from file
