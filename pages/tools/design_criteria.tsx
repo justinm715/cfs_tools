@@ -9,6 +9,7 @@ import { Menu } from '@headlessui/react'
 import { ChevronDownIcon, PlusSmIcon, XIcon, PlusIcon } from '@heroicons/react/solid'
 
 import { AutoSaveValues, FpChart, saveProjectToFile, loadProjectFromFile, handleLoadProjectFromFile } from './_utils'
+import { classNames } from './_helpers'
 
 
 const SimpleTextInput = ({ label, ...props }) => {
@@ -65,10 +66,6 @@ const DesignCriteria: NextPage = () => {
     setInitialValues: setInitialValues,
     formInitialized: formInitialized,
     setFormInitialized: setFormInitialized
-  }
-
-  function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
   }
 
   return (
@@ -203,7 +200,7 @@ const DesignCriteria: NextPage = () => {
                           {({ active }) => (
                             <a
                               href="#"
-                              className={classNames(active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-2 py-1 text-sm')}
+                              className={classNames(active ? 'bg-blue-200 text-gray-900' : 'text-gray-700', 'block px-2 py-1 text-sm')}
                               onClick={() => {
                                 arrayHelpers.push({
                                   name: "(1) 5/8\" Gyp Ea Side",
@@ -227,7 +224,7 @@ const DesignCriteria: NextPage = () => {
                           {({ active }) => (
                             <a
                               href="#"
-                              className={classNames(active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-2 py-1 text-sm')}
+                              className={classNames(active ? 'bg-blue-200 text-gray-900' : 'text-gray-700', 'block px-2 py-1 text-sm')}
                               onClick={() => {
                                 arrayHelpers.push({
                                   name: "(2) 5/8\" Gyp Ea Side",
@@ -251,7 +248,7 @@ const DesignCriteria: NextPage = () => {
                           {({ active }) => (
                             <a
                               href="#"
-                              className={classNames(active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-2 py-1 text-sm')}
+                              className={classNames(active ? 'bg-blue-200 text-gray-900' : 'text-gray-700', 'block px-2 py-1 text-sm')}
                               onClick={() => {
                                 arrayHelpers.push({
                                   name: "(2) 5/8\" Gyp + (1) 1\" Gyp Shaft",

@@ -6,13 +6,16 @@ import moment from 'moment'
 import { Formik, Form, useField, Field, FieldArray, useFormikContext } from "formik"
 import { ChevronDownIcon, PlusSmIcon, XIcon, PlusIcon, PencilIcon } from '@heroicons/react/solid'
 
-import { AutoSaveValues, AddNewInteriorSchedule } from './_utils'
+import { classNames } from './_helpers'
+
+import { AutoSaveValues, AddNewInteriorSchedule, ActiveInteriorScheduleForm, ActiveInteriorScheduleResultsTables } from './_utils'
 
 
 export default function InteriorSchedules() {
 
   const [initialValues, setInitialValues] = useState({})
   const [formInitialized, setFormInitialized] = useState(false)
+  const [activeInteriorSchedule, setActiveInteriorSchedule] = useState(null)
 
   // for <AutoSaveValues ... stateHandlers={stateHandlers} />
   const stateHandlers = {
@@ -95,25 +98,25 @@ export default function InteriorSchedules() {
                             Add
                           </button>
                         </p>
-                        <hr className="my-2 border-gray-400" />
 
                         { /* list schedules */}
                         {(props.values.interiorSchedules && props.values.interiorSchedules.length > 0) ? (
-                          <table className="text-sm">
+                          <table className="text-sm w-full border border-gray-400 mt-4 mb-12">
                             <thead>
                               <tr className="border-b border-b-gray-400">
-                                <td className="p-1 border-r border-r-gray-400">Edit</td>
+                                <td className="p-1 border-r border-r-gray-400 w-8">Edit</td>
                                 <td className="p-1 border-r border-r-gray-400">Wall Assembly</td>
                                 <td className="p-1 border-r border-r-gray-400">Created</td>
                                 <td className="p-1 border-r border-r-gray-400">Last Run</td>
-                                <td className="p-1">Delete</td>
+                                <td className="p-1 w-8">Delete</td>
                               </tr>
                             </thead>
                             <tbody>
                               {props.values.interiorSchedules.map((schedule, scheduleIndex) => (
-                                <tr className="border-b border-b-gray-400 last:border-0 hover:bg-blue-100" key={'schedule-' + scheduleIndex}>
+                                <tr className={classNames(scheduleIndex == activeInteriorSchedule ? 'bg-blue-300' : '', 'border-b border-b-gray-400 last:border-0 hover:bg-blue-100')} key={'schedule-' + scheduleIndex}>
                                   <td className="p-1 border-r border-r-gray-400 text-center">
-                                    <button type="button" onClick={() => { interiorSchedulesArrayHelpers.remove(scheduleIndex) }}>
+                                    { /* edit schedule */}
+                                    <button type="button" onClick={() => { setActiveInteriorSchedule(scheduleIndex) }} >
                                       <PencilIcon className="mx-2 h-4 w-4 text-green-600" aria-hidden="true" />
                                     </button>
                                   </td>
@@ -121,6 +124,7 @@ export default function InteriorSchedules() {
                                   <td className="p-1 border-r border-r-gray-400">{moment(schedule.created).calendar()}</td>
                                   <td className="p-1 border-r border-r-gray-400">TODO: Last Run</td>
                                   <td className="p-1 text-center">
+                                    { /* delete schedules */}
                                     <button type="button" onClick={() => { interiorSchedulesArrayHelpers.remove(scheduleIndex) }}>
                                       <XIcon className="mx-2 h-3 w-3 text-red-400" aria-hidden="true" />
                                     </button>
@@ -134,9 +138,10 @@ export default function InteriorSchedules() {
                         }
 
                         { /* active schedule */}
-                        <p>
-
-                        </p>
+                        <>
+                          <ActiveInteriorScheduleForm activeInteriorSchedule={activeInteriorSchedule} />
+                          <ActiveInteriorScheduleResultsTables />
+                        </>
                       </>
                     )} /> {/* end interiorSchedules FieldArray*/}
                   </>

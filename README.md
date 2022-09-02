@@ -2,8 +2,12 @@
 
 ### Schedules
 
+ * show wall assembly info in schedule parameters
  * show list of schedules with last runs
    * schedule is collapsible
+ * set defaults for new schedule
+ * seismic options - show max z/h Fp value
+ * vertical presentation of stud sizes and design type checkboxes
 
 ---
 

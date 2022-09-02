@@ -4,6 +4,8 @@ import Router from 'next/router'
 import { useFormikContext } from "formik"
 
 import { Field, FieldArray } from "formik"
+import { ChevronDownIcon, PlusSmIcon, XIcon, PlusIcon, PencilIcon } from '@heroicons/react/solid'
+
 
 import * as Helpers from './_helpers'
 
@@ -207,5 +209,215 @@ export const AddNewInteriorSchedule = ({ wallAssemblies }) => {
         </option>
       ))}
     </Field>
+  )
+}
+
+export const ActiveInteriorScheduleForm = ({ activeInteriorSchedule }) => {
+  if (activeInteriorSchedule == null) {
+    // TODO: Uncomment this return for no schedule selected. Defaulting to 0 for dev
+
+    return (
+      <div>
+        <p>No schedule selected.</p>
+      </div>
+    )
+    //activeInteriorSchedule = 0
+  }
+  const { values } = useFormikContext();
+
+  return (
+    <div>
+      <p className="text-green-400 hidden">
+        Currently selected schedule {activeInteriorSchedule}
+      </p>
+      <h3 className="text-xl mb-2 mt-2">Schedule Parameters</h3>
+      <div className="grid grid-cols-2 gap-2">
+        <div className="col-span-2">
+          {/* Stud Sizes */}
+          <span className="pr-4 w-32 inline-block">Stud Sizes:</span>
+          <label className="hover:bg-blue-200 mr-6 p-1">
+            <Field type="checkbox" name={`interiorSchedules[${activeInteriorSchedule}].studSizes-162`} />
+            <span className="pl-2">1 5/8"</span>
+          </label>
+          <label className="hover:bg-blue-200 mr-6 p-1">
+            <Field type="checkbox" name={`interiorSchedules[${activeInteriorSchedule}].studSizes-250`} />
+            <span className="pl-2">2 1/2"</span>
+          </label>
+          <label className="hover:bg-blue-200 mr-6 p-1">
+            <Field type="checkbox" name={`interiorSchedules[${activeInteriorSchedule}].studSizes-362`} />
+            <span className="pl-2">3 5/8"</span>
+          </label>
+          <label className="hover:bg-blue-200 mr-6 p-1">
+            <Field type="checkbox" name={`interiorSchedules[${activeInteriorSchedule}].studSizes-400`} />
+            <span className="pl-2">4"</span>
+          </label>
+          <label className="hover:bg-blue-200 mr-6 p-1">
+            <Field type="checkbox" name={`interiorSchedules[${activeInteriorSchedule}].studSizes-600`} />
+            <span className="pl-2">6"</span>
+          </label>
+          <label className="hover:bg-blue-200 mr-6 p-1">
+            <Field type="checkbox" name={`interiorSchedules[${activeInteriorSchedule}].studSizes-800`} />
+            <span className="pl-2">8"</span>
+          </label>
+        </div>
+
+        {/* Design which members */}
+        <div className="col-span-2">
+          <span className="pr-4 w-32 inline-block">Design Type:</span>
+          <label className="hover:bg-blue-200 mr-6 p-1">
+            <Field type="checkbox" name={`interiorSchedules[${activeInteriorSchedule}].designType-typicalStuds`} />
+            <span className="pl-2">Typical Studs</span>
+          </label>
+          <label className="hover:bg-blue-200 mr-6 p-1">
+            <Field type="checkbox" name={`interiorSchedules[${activeInteriorSchedule}].designType-headers`} />
+            <span className="pl-2">Headers</span>
+          </label>
+          <label className="hover:bg-blue-200 mr-6 p-1">
+            <Field type="checkbox" name={`interiorSchedules[${activeInteriorSchedule}].designType-jambs`} />
+            <span className="pl-2">Jambs</span>
+          </label>
+          <label className="hover:bg-blue-200 mr-6 p-1">
+            <Field type="checkbox" name={`interiorSchedules[${activeInteriorSchedule}].designType-sills`} />
+            <span className="pl-2">Sills</span>
+          </label>
+        </div>
+
+        {/* column 1 */}
+        <div className="border-r m-r-1">
+          {/* spacing */}
+          <div>
+            <span className="pr-4 w-32 inline-block mb-2">Spacing:</span>
+            <Field type="text" className="border border-gray-400 w-12 pr-2 text-right" name={`interiorSchedules[${activeInteriorSchedule}].spacing`} />
+            <span className="pl-2">in.</span>
+          </div>
+
+          {/* bracing */}
+          <div>
+            <span className="pr-4 w-32 inline-block mb-2">Bracing:</span>
+            <Field type="text" className="border border-gray-400 w-12 pr-2 text-right" name={`interiorSchedules[${activeInteriorSchedule}].bracing`} />
+            <span className="pl-2">in.</span>
+          </div>
+
+          {/* wall heights */}
+          <FieldArray name={`interiorSchedules[${activeInteriorSchedule}][wallHeights]`} render={(wallHeightsArrayHelper) => (
+            <>
+              <span className="pr-4 block mb-2">
+                Wall Heights:
+                <button type="button" onClick={() => { wallHeightsArrayHelper.push({ span: "" }) }}>
+                  <PlusIcon className="mx-2 inline h-4 w-4 text-green-500" aria-hidden="true" />
+                </button>
+              </span>
+              <div className="ml-12">
+                {(values.interiorSchedules[activeInteriorSchedule].wallHeights && values.interiorSchedules[activeInteriorSchedule].wallHeights.length > 0) ?
+                  (values.interiorSchedules[activeInteriorSchedule].wallHeights.map((wallHeight, wallHeightIndex) => (
+                    <>
+                      <div className="mb-2">
+                        <Field type="text" className="border border-gray-400 w-12 pr-2 text-right" name={`interiorSchedules[${activeInteriorSchedule}][wallHeights][${wallHeightIndex}].span`} />
+                        <span className="pl-2 inline">ft</span>
+                        <button type="button" onClick={() => { wallHeightsArrayHelper.remove(wallHeightIndex) }}>
+                          <XIcon className="mx-2 inline h-3 w-3 text-red-400" aria-hidden="true" />
+                        </button>
+                      </div>
+                    </>
+                  ))
+                  ) : ""}
+              </div>
+            </>
+          )} />
+
+          {/* opening widths */}
+          <FieldArray name={`interiorSchedules[${activeInteriorSchedule}][openingWidths]`} render={(openingWidthsArrayHelper) => (
+            <>
+              <span className="pr-4 block mb-2">
+                Opening Widths:
+                <button type="button" onClick={() => { openingWidthsArrayHelper.push({ span: "" }) }}>
+                  <PlusIcon className="mx-2 inline h-4 w-4 text-green-500" aria-hidden="true" />
+                </button>
+              </span>
+              <div className="ml-12">
+                {(values.interiorSchedules[activeInteriorSchedule].openingWidths && values.interiorSchedules[activeInteriorSchedule].openingWidths.length > 0) ?
+                  (values.interiorSchedules[activeInteriorSchedule].openingWidths.map((openingWidth, openingWidthIndex) => (
+                    <>
+                      <div className="mb-2">
+                        <Field type="text" className="border border-gray-400 w-12 pr-2 text-right" name={`interiorSchedules[${activeInteriorSchedule}][openingWidths][${openingWidthIndex}].span`} />
+                        <span className="pl-2 inline">ft</span>
+                        <button type="button" onClick={() => { openingWidthsArrayHelper.remove(openingWidthIndex) }}>
+                          <XIcon className="mx-2 inline h-3 w-3 text-red-400" aria-hidden="true" />
+                        </button>
+                      </div>
+                    </>
+                  ))
+                  ) : ""}
+              </div>
+            </>
+          )} />
+
+          {/* header height */}
+          <span className="pr-4 w-32 inline-block mb-2">Header Height:</span>
+          <Field type="text" className="border border-gray-400 w-12 pr-2 text-right" name={`interiorSchedules[${activeInteriorSchedule}].headerHeight`} />
+          <span className="pl-2">ft.</span>
+
+          {/* small-span headers trib */}
+          <div>
+            <label>
+              <div className="hover:bg-blue-200">
+                <Field type="checkbox" className="mx-2" name={`interiorSchedules[${activeInteriorSchedule}].smallSpanHeaderTrib`} />
+                <span>Small-Span Headers</span>
+                <p className="text-sm mx-6">
+                  Design small-span headers (4.25 ft. or less) for dead load from tributary wall height equal to span of header.
+                </p>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        {/* column 2 */}
+        <div>
+
+          {/* show wall assembly properties */}
+          <h4 className="font-semibold">Wall Assembly</h4>
+          <p>Properties were imported from wall assembly definition:</p>
+          <ul className="ml-4">
+            <li>
+              - Dead Weight:
+              <span className="border-b border-b-gray-400 ml-3">
+                {Helpers.sumWallAssemblyParts(values.interiorSchedules[activeInteriorSchedule].wallAssembly)} lbs/sq ft
+              </span>
+            </li>
+            <li>
+              - Uniform Live Load:
+              <span className="border-b border-b-gray-400 ml-3">
+                {values.interiorSchedules[activeInteriorSchedule].wallAssembly.uniformLive} lbs/sq ft
+              </span>
+            </li>
+            <li>
+              - Live Load Deflection Criteria:
+              <span className="border-b border-b-gray-400 ml-3">
+                L/{values.interiorSchedules[activeInteriorSchedule].wallAssembly.deflectionLimit}
+              </span>
+            </li>
+          </ul>
+
+          {/* seismic option */}
+          <h4 className="font-semibold mt-6">Seismic Option</h4>
+          <label className="block">
+            <Field type="radio" className="mx-2" name={`interiorSchedules[${activeInteriorSchedule}].seismicFpOption`} value="max" />Use F<sub>p</sub> for max z/h
+          </label>
+          <label>
+            <Field type="radio" className="mx-2" name={`interiorSchedules[${activeInteriorSchedule}].seismicFpOption`} value="custom" />Use custom nominal F<sub>p</sub> :
+            <Field type="text" className="border border-gray-400 w-16 pr-2 text-right ml-2" name={`interiorSchedules[${activeInteriorSchedule}].seismicFpOptionCustomValue`} />
+          </label>
+
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export const ActiveInteriorScheduleResultsTables = () => {
+  return (
+    <p>
+      ActiveInteriorScheduleResultsTables
+    </p>
   )
 }
