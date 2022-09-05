@@ -89,8 +89,8 @@ export default function InteriorSchedules() {
                                 alert("Invalid assembly selected.")
                               } else {
                                 let selectedWallAssembly = designCriteria["wallAssemblies"].find((e) => e.UUID == selectedWallAssemblyUUID)
-                                let newWallAssembly = { 
-                                  wallAssembly: selectedWallAssembly, 
+                                let newWallAssembly = {
+                                  wallAssembly: selectedWallAssembly,
                                   created: moment(),
                                   bracing: '48', // inches
                                   'designType-typicalStuds': true,
@@ -98,20 +98,20 @@ export default function InteriorSchedules() {
                                   'designType-jambs': true,
                                   'designType-sills': true,
                                   headerHeight: '7', // feet,
-                                  openingWidths: [{ span: "4.25"}, { span: "6.25"}, { span: "8.25"}], // feet
-                                  wallHeights: [{ span: "10"}, { span: "13"}, { span: "16"}], // feet
+                                  openingWidths: [{ span: "4.25" }, { span: "6.25" }, { span: "8.25" }], // feet
+                                  wallHeights: [{ span: "10" }, { span: "13" }, { span: "16" }], // feet
                                   seismicFpOption: "max",
                                   smallSpanHeaderTrib: true,
                                   spacing: "24", // inches
                                   'studSizes-162': false,
                                   'studSizes-250': false,
                                   'studSizes-362': true,
-                                  'studSizes-400': false, 
+                                  'studSizes-400': false,
                                   'studSizes-600': true,
                                   'studSizes-800': false,
                                   lastRun: null
                                 }
-                                interiorSchedulesArrayHelpers.push( newWallAssembly )
+                                interiorSchedulesArrayHelpers.push(newWallAssembly)
                                 console.log("Added new interior schedule")
                                 console.log(selectedWallAssembly)
                               }
@@ -146,9 +146,9 @@ export default function InteriorSchedules() {
                                     {schedule.wallAssembly.name}
                                     <p className="text-xs">
                                       D: {Helpers.sumWallAssemblyParts(schedule.wallAssembly)} lbs/sq ft;
-                                      L: 
-                                        {schedule.wallAssembly.uniformLive} lbs/sq ft
-                                        @ L/{schedule.wallAssembly.deflectionLimit}
+                                      L:
+                                      {schedule.wallAssembly.uniformLive} lbs/sq ft
+                                      @ L/{schedule.wallAssembly.deflectionLimit}
                                     </p>
                                   </td>
                                   <td className="p-1 border-r border-r-gray-400">{moment(schedule.created).calendar()}</td>

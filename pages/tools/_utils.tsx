@@ -7,6 +7,7 @@ import { Field, FieldArray } from "formik"
 import { ChevronDownIcon, PlusSmIcon, XIcon, PlusIcon, PencilIcon } from '@heroicons/react/solid'
 
 import moment from 'moment'
+import * as dfd from "danfojs-node"
 
 import * as Helpers from './_helpers'
 
@@ -213,31 +214,9 @@ export const AddNewInteriorSchedule = ({ wallAssemblies }) => {
   )
 }
 
-const RunInteriorSchedule = (activeInteriorSchedule, designCriteria) => {
-
-  
-  // logger for debugging purposes
-  const runLogIt = (msg) => {
-    let now = moment().format("HH:mm:ss")
-    let str = `<p class="text-sm">${now}: ${msg}</p>`
-    document.querySelector('#runLog').innerHTML += str
-    // scroll to bottom of logger list
-    document.querySelector('#runLog').scrollTop = document.querySelector('#runLog').scrollHeight
-  }
-
-  // activeInteriorSchedule.lastRun = moment()
-  
-  return (
-    <>
-      { console.log("RunInteriorSchedule called")}
-      { console.log(activeInteriorSchedule) }
-      { console.log(designCriteria) }
-      { runLogIt("Here we go") }
-    </>
-  )
-}
 
 export const ActiveInteriorScheduleForm = ({ activeInteriorSchedule, designCriteria }) => {
+  
   if (activeInteriorSchedule == null) {
     return (
       <div>
@@ -245,13 +224,57 @@ export const ActiveInteriorScheduleForm = ({ activeInteriorSchedule, designCrite
       </div>
     )
   }
+  
   const { values, setFieldValue } = useFormikContext();
+
+  // where the magic happens
+  const RunInteriorSchedule = () => {
+  
+    // logger for debugging purposes
+    const runLogIt = (msg) => {
+      let now = moment().format("HH:mm:ss")
+      let str = `<p class="text-sm">${now}: ${msg}</p>`
+      document.querySelector('#runLog').innerHTML += str
+      // scroll to bottom of logger list
+      document.querySelector('#runLog').scrollTop = document.querySelector('#runLog').scrollHeight
+    }
+
+    const currSchedule = values.interiorSchedules[activeInteriorSchedule]
+  
+    // for each stud size
+    runLogIt("Getting stud sizes...")
+    console.log("RunInteriorSchedule called")
+    console.log(activeInteriorSchedule)
+    console.log(currSchedule)
+    let studSizes = []
+    // there's more clever ways to do this, but this is easy and readable:
+    currSchedule["studSizes-162"] ? studSizes.push("162") : null
+    currSchedule["studSizes-250"] ? studSizes.push("250") : null
+    currSchedule["studSizes-362"] ? studSizes.push("362") : null
+    currSchedule["studSizes-400"] ? studSizes.push("400") : null
+    currSchedule["studSizes-600"] ? studSizes.push("600") : null
+    currSchedule["studSizes-800"] ? studSizes.push("800") : null
+    runLogIt("Found stud sizes for " + studSizes)
+    
+    // for each design type..
+
+    // typical studs
+    if (currSchedule['designType-typicalStuds']) {
+      // select studs from the database
+      dfd.readCSV("./data/stud_sections.csv")
+        .then( df => {
+          console.log(df)
+        })
+    }
+  
+  }
+
 
   return (
     <div>
       <h3 className="text-xl mb-2 mt-2">Schedule Parameters</h3>
       <div className="grid grid-cols-2 gap-2">
-        
+
         {/* column 1 */}
         <div className="border-r border-r-gray-400">
 
@@ -283,9 +306,9 @@ export const ActiveInteriorScheduleForm = ({ activeInteriorSchedule, designCrite
           <h4 className="mt-4">Seismic Option</h4>
           <label className="block mb-2">
             <Field type="radio" className="mx-2" name={`interiorSchedules[${activeInteriorSchedule}].seismicFpOption`} value="max" />
-            Use nominal F<sub>p</sub> for max z/h 
+            Use nominal F<sub>p</sub> for max z/h
             <span className="border-b border-b-gray-400 ml-3">
-              { Helpers.Fp_ASCE716(designCriteria.S_DS,designCriteria.I_p, 1.0, 2.5).toFixed(3) } W<sub>p</sub>
+              {Helpers.Fp_ASCE716(designCriteria.S_DS, designCriteria.I_p, 1.0, 2.5).toFixed(3)} W<sub>p</sub>
             </span>
             <p className="ml-8">
               With a<sub>p</sub> = 1.0, R<sub>p</sub> = 2.5
@@ -305,31 +328,31 @@ export const ActiveInteriorScheduleForm = ({ activeInteriorSchedule, designCrite
               <Field type="checkbox" name={`interiorSchedules[${activeInteriorSchedule}].studSizes-162`} />
               <span className="pl-2">1 5/8"</span>
             </div>
-          </label>          
+          </label>
           <label className="hover:bg-blue-200 block ml-8 w-24">
             <div className="inline-block py-0.5 px-2">
               <Field type="checkbox" name={`interiorSchedules[${activeInteriorSchedule}].studSizes-250`} />
               <span className="pl-2">2 1/2"</span>
             </div>
-          </label>        
+          </label>
           <label className="hover:bg-blue-200 block ml-8 w-24">
             <div className="inline-block py-0.5 px-2">
               <Field type="checkbox" name={`interiorSchedules[${activeInteriorSchedule}].studSizes-362`} />
               <span className="pl-2">3 5/8"</span>
             </div>
-          </label>        
+          </label>
           <label className="hover:bg-blue-200 block ml-8 w-24">
             <div className="inline-block py-0.5 px-2">
               <Field type="checkbox" name={`interiorSchedules[${activeInteriorSchedule}].studSizes-400`} />
               <span className="pl-2">4"</span>
             </div>
-          </label>        
+          </label>
           <label className="hover:bg-blue-200 block ml-8 w-24">
             <div className="inline-block py-0.5 px-2">
               <Field type="checkbox" name={`interiorSchedules[${activeInteriorSchedule}].studSizes-600`} />
               <span className="pl-2">6"</span>
             </div>
-          </label>        
+          </label>
           <label className="hover:bg-blue-200 block ml-8 w-24">
             <div className="inline-block py-0.5 px-2">
               <Field type="checkbox" name={`interiorSchedules[${activeInteriorSchedule}].studSizes-800`} />
@@ -461,18 +484,18 @@ export const ActiveInteriorScheduleForm = ({ activeInteriorSchedule, designCrite
       </div>
 
       <div className="mt-6 text-center">
-        <button 
+        <button
           type="button"
           className="py-3 px-10 bg-blue-600 text-slate-100"
-          onClick={ () => { 
+          onClick={() => {
             setFieldValue(`interiorSchedules[${activeInteriorSchedule}].lastRun`, moment())
-            RunInteriorSchedule(values.interiorSchedules[activeInteriorSchedule], designCriteria) 
-          } }
+            RunInteriorSchedule()
+          }}
         >
           Run Schedule
         </button>
       </div>
-      
+
     </div>
   )
 }
