@@ -6,6 +6,7 @@ import { useFormikContext } from "formik"
 import { Field, FieldArray } from "formik"
 import { ChevronDownIcon, PlusSmIcon, XIcon, PlusIcon, PencilIcon } from '@heroicons/react/solid'
 
+import moment from 'moment'
 
 import * as Helpers from './_helpers'
 
@@ -212,6 +213,30 @@ export const AddNewInteriorSchedule = ({ wallAssemblies }) => {
   )
 }
 
+const RunInteriorSchedule = (activeInteriorSchedule, designCriteria) => {
+
+  
+  // logger for debugging purposes
+  const runLogIt = (msg) => {
+    let now = moment().format("HH:mm:ss")
+    let str = `<p class="text-sm">${now}: ${msg}</p>`
+    document.querySelector('#runLog').innerHTML += str
+    // scroll to bottom of logger list
+    document.querySelector('#runLog').scrollTop = document.querySelector('#runLog').scrollHeight
+  }
+
+  // activeInteriorSchedule.lastRun = moment()
+  
+  return (
+    <>
+      { console.log("RunInteriorSchedule called")}
+      { console.log(activeInteriorSchedule) }
+      { console.log(designCriteria) }
+      { runLogIt("Here we go") }
+    </>
+  )
+}
+
 export const ActiveInteriorScheduleForm = ({ activeInteriorSchedule, designCriteria }) => {
   if (activeInteriorSchedule == null) {
     return (
@@ -220,7 +245,7 @@ export const ActiveInteriorScheduleForm = ({ activeInteriorSchedule, designCrite
       </div>
     )
   }
-  const { values } = useFormikContext();
+  const { values, setFieldValue } = useFormikContext();
 
   return (
     <div>
@@ -436,7 +461,14 @@ export const ActiveInteriorScheduleForm = ({ activeInteriorSchedule, designCrite
       </div>
 
       <div className="mt-6 text-center">
-        <button type="button" className="py-3 px-10 bg-blue-600 text-slate-100">
+        <button 
+          type="button"
+          className="py-3 px-10 bg-blue-600 text-slate-100"
+          onClick={ () => { 
+            setFieldValue(`interiorSchedules[${activeInteriorSchedule}].lastRun`, moment())
+            RunInteriorSchedule(values.interiorSchedules[activeInteriorSchedule], designCriteria) 
+          } }
+        >
           Run Schedule
         </button>
       </div>

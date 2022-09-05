@@ -190,8 +190,10 @@ export default function InteriorSchedules() {
 
           </div>
         </div>
-        <div className="overflow-y-auto h-[calc(100vh-65px)] p-2 bg-gray-100">
+        <div className="overflow-y-auto h-[calc(100vh-65px)] p-2 bg-gray-100" id="resultsDiv">
           <p>Results will be displayed here.</p>
+          <div id="resultView"></div>
+          <div id="runLog" className="text-sm max-h-80 overflow-y-auto"></div>
         </div>
       </div>
 

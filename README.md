@@ -5,7 +5,6 @@
 
  * show list of schedules with last runs
    * ✅ show wall assembly info
-   * show schedule parameters
  * run button
 
 
