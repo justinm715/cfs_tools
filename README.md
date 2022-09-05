@@ -2,12 +2,12 @@
 
 ### Schedules
 
- * show wall assembly info in schedule parameters
+
  * show list of schedules with last runs
-   * schedule is collapsible
- * set defaults for new schedule
- * seismic options - show max z/h Fp value
- * vertical presentation of stud sizes and design type checkboxes
+   * ✅ show wall assembly info
+   * show schedule parameters
+ * run button
+
 
 ---
 
@@ -20,6 +20,11 @@
 
 ---
 
+ * ✅ rearrange schedule parameters
+ * ✅ set defaults for new schedule
+ * ✅ show wall assembly info in schedule parameters
+ * ✅ seismic options - show max z/h Fp value
+ * ✅ vertical presentation of stud sizes and design type checkboxes
  * ✅ fix interior schedules being reset on load of Interior Schedules page
  * 🥶 replace select dropdown w/ button dropdown
  * ✅ error, if there is no design criteria and wall assemblies, tell them to do it first

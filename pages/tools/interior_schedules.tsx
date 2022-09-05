@@ -6,7 +6,7 @@ import moment from 'moment'
 import { Formik, Form, useField, Field, FieldArray, useFormikContext } from "formik"
 import { ChevronDownIcon, PlusSmIcon, XIcon, PlusIcon, PencilIcon } from '@heroicons/react/solid'
 
-import { classNames } from './_helpers'
+import * as Helpers from './_helpers'
 
 import { AutoSaveValues, AddNewInteriorSchedule, ActiveInteriorScheduleForm, ActiveInteriorScheduleResultsTables } from './_utils'
 
@@ -89,7 +89,29 @@ export default function InteriorSchedules() {
                                 alert("Invalid assembly selected.")
                               } else {
                                 let selectedWallAssembly = designCriteria["wallAssemblies"].find((e) => e.UUID == selectedWallAssemblyUUID)
-                                interiorSchedulesArrayHelpers.push({ wallAssembly: selectedWallAssembly, created: moment() })
+                                let newWallAssembly = { 
+                                  wallAssembly: selectedWallAssembly, 
+                                  created: moment(),
+                                  bracing: '48', // inches
+                                  'designType-typicalStuds': true,
+                                  'designType-headers': true,
+                                  'designType-jambs': true,
+                                  'designType-sills': true,
+                                  headerHeight: '7', // feet,
+                                  openingWidths: [{ span: "4.25"}, { span: "6.25"}, { span: "8.25"}], // feet
+                                  wallHeights: [{ span: "10"}, { span: "13"}, { span: "16"}], // feet
+                                  seismicFpOption: "max",
+                                  smallSpanHeaderTrib: true,
+                                  spacing: "24", // inches
+                                  'studSizes-162': false,
+                                  'studSizes-250': false,
+                                  'studSizes-362': true,
+                                  'studSizes-400': false, 
+                                  'studSizes-600': true,
+                                  'studSizes-800': false,
+                                  lastRun: null
+                                }
+                                interiorSchedulesArrayHelpers.push( newWallAssembly )
                                 console.log("Added new interior schedule")
                                 console.log(selectedWallAssembly)
                               }
@@ -113,16 +135,24 @@ export default function InteriorSchedules() {
                             </thead>
                             <tbody>
                               {props.values.interiorSchedules.map((schedule, scheduleIndex) => (
-                                <tr className={classNames(scheduleIndex == activeInteriorSchedule ? 'bg-blue-300' : '', 'border-b border-b-gray-400 last:border-0 hover:bg-blue-100')} key={'schedule-' + scheduleIndex}>
+                                <tr className={Helpers.classNames(scheduleIndex == activeInteriorSchedule ? 'bg-blue-300' : '', 'border-b border-b-gray-400 last:border-0 hover:bg-blue-100')} key={'schedule-' + scheduleIndex}>
                                   <td className="p-1 border-r border-r-gray-400 text-center">
                                     { /* edit schedule */}
                                     <button type="button" onClick={() => { setActiveInteriorSchedule(scheduleIndex) }} >
                                       <PencilIcon className="mx-2 h-4 w-4 text-green-600" aria-hidden="true" />
                                     </button>
                                   </td>
-                                  <td className="p-1 border-r border-r-gray-400">{schedule.wallAssembly.name}</td>
+                                  <td className="p-1 border-r border-r-gray-400">
+                                    {schedule.wallAssembly.name}
+                                    <p className="text-xs">
+                                      D: {Helpers.sumWallAssemblyParts(schedule.wallAssembly)} lbs/sq ft;
+                                      L: 
+                                        {schedule.wallAssembly.uniformLive} lbs/sq ft
+                                        @ L/{schedule.wallAssembly.deflectionLimit}
+                                    </p>
+                                  </td>
                                   <td className="p-1 border-r border-r-gray-400">{moment(schedule.created).calendar()}</td>
-                                  <td className="p-1 border-r border-r-gray-400">TODO: Last Run</td>
+                                  <td className="p-1 border-r border-r-gray-400">{schedule.lastRun ? moment(schedule.lastRun).calendar() : ""}</td>
                                   <td className="p-1 text-center">
                                     { /* delete schedules */}
                                     <button type="button" onClick={() => { interiorSchedulesArrayHelpers.remove(scheduleIndex) }}>
@@ -139,7 +169,8 @@ export default function InteriorSchedules() {
 
                         { /* active schedule */}
                         <>
-                          <ActiveInteriorScheduleForm activeInteriorSchedule={activeInteriorSchedule} />
+                          <ActiveInteriorScheduleForm activeInteriorSchedule={activeInteriorSchedule} designCriteria={designCriteria} />
+                          <hr className="mt-8 border-b-1 border-gray-400" />
                           <ActiveInteriorScheduleResultsTables />
                         </>
                       </>

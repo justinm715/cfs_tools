@@ -212,80 +212,108 @@ export const AddNewInteriorSchedule = ({ wallAssemblies }) => {
   )
 }
 
-export const ActiveInteriorScheduleForm = ({ activeInteriorSchedule }) => {
+export const ActiveInteriorScheduleForm = ({ activeInteriorSchedule, designCriteria }) => {
   if (activeInteriorSchedule == null) {
-    // TODO: Uncomment this return for no schedule selected. Defaulting to 0 for dev
-
     return (
       <div>
         <p>No schedule selected.</p>
       </div>
     )
-    //activeInteriorSchedule = 0
   }
   const { values } = useFormikContext();
 
   return (
     <div>
-      <p className="text-green-400 hidden">
-        Currently selected schedule {activeInteriorSchedule}
-      </p>
       <h3 className="text-xl mb-2 mt-2">Schedule Parameters</h3>
       <div className="grid grid-cols-2 gap-2">
-        <div className="col-span-2">
-          {/* Stud Sizes */}
-          <span className="pr-4 w-32 inline-block">Stud Sizes:</span>
-          <label className="hover:bg-blue-200 mr-6 p-1">
-            <Field type="checkbox" name={`interiorSchedules[${activeInteriorSchedule}].studSizes-162`} />
-            <span className="pl-2">1 5/8"</span>
-          </label>
-          <label className="hover:bg-blue-200 mr-6 p-1">
-            <Field type="checkbox" name={`interiorSchedules[${activeInteriorSchedule}].studSizes-250`} />
-            <span className="pl-2">2 1/2"</span>
-          </label>
-          <label className="hover:bg-blue-200 mr-6 p-1">
-            <Field type="checkbox" name={`interiorSchedules[${activeInteriorSchedule}].studSizes-362`} />
-            <span className="pl-2">3 5/8"</span>
-          </label>
-          <label className="hover:bg-blue-200 mr-6 p-1">
-            <Field type="checkbox" name={`interiorSchedules[${activeInteriorSchedule}].studSizes-400`} />
-            <span className="pl-2">4"</span>
-          </label>
-          <label className="hover:bg-blue-200 mr-6 p-1">
-            <Field type="checkbox" name={`interiorSchedules[${activeInteriorSchedule}].studSizes-600`} />
-            <span className="pl-2">6"</span>
-          </label>
-          <label className="hover:bg-blue-200 mr-6 p-1">
-            <Field type="checkbox" name={`interiorSchedules[${activeInteriorSchedule}].studSizes-800`} />
-            <span className="pl-2">8"</span>
-          </label>
-        </div>
-
-        {/* Design which members */}
-        <div className="col-span-2">
-          <span className="pr-4 w-32 inline-block">Design Type:</span>
-          <label className="hover:bg-blue-200 mr-6 p-1">
-            <Field type="checkbox" name={`interiorSchedules[${activeInteriorSchedule}].designType-typicalStuds`} />
-            <span className="pl-2">Typical Studs</span>
-          </label>
-          <label className="hover:bg-blue-200 mr-6 p-1">
-            <Field type="checkbox" name={`interiorSchedules[${activeInteriorSchedule}].designType-headers`} />
-            <span className="pl-2">Headers</span>
-          </label>
-          <label className="hover:bg-blue-200 mr-6 p-1">
-            <Field type="checkbox" name={`interiorSchedules[${activeInteriorSchedule}].designType-jambs`} />
-            <span className="pl-2">Jambs</span>
-          </label>
-          <label className="hover:bg-blue-200 mr-6 p-1">
-            <Field type="checkbox" name={`interiorSchedules[${activeInteriorSchedule}].designType-sills`} />
-            <span className="pl-2">Sills</span>
-          </label>
-        </div>
-
+        
         {/* column 1 */}
-        <div className="border-r m-r-1">
+        <div className="border-r border-r-gray-400">
+
+          {/* show wall assembly properties */}
+          <h4>Wall Assembly</h4>
+          <p>Properties were imported from wall assembly definition:</p>
+          <ul className="ml-4">
+            <li>
+              - Dead Weight:
+              <span className="border-b border-b-gray-400 ml-3">
+                {Helpers.sumWallAssemblyParts(values.interiorSchedules[activeInteriorSchedule].wallAssembly)} lbs/sq ft
+              </span>
+            </li>
+            <li>
+              - Uniform Live Load:
+              <span className="border-b border-b-gray-400 ml-3">
+                {values.interiorSchedules[activeInteriorSchedule].wallAssembly.uniformLive} lbs/sq ft
+              </span>
+            </li>
+            <li>
+              - Live Load Deflection Criteria:
+              <span className="border-b border-b-gray-400 ml-3">
+                L/{values.interiorSchedules[activeInteriorSchedule].wallAssembly.deflectionLimit}
+              </span>
+            </li>
+          </ul>
+
+          {/* seismic option */}
+          <h4 className="mt-4">Seismic Option</h4>
+          <label className="block mb-2">
+            <Field type="radio" className="mx-2" name={`interiorSchedules[${activeInteriorSchedule}].seismicFpOption`} value="max" />
+            Use nominal F<sub>p</sub> for max z/h 
+            <span className="border-b border-b-gray-400 ml-3">
+              { Helpers.Fp_ASCE716(designCriteria.S_DS,designCriteria.I_p, 1.0, 2.5).toFixed(3) } W<sub>p</sub>
+            </span>
+            <p className="ml-8">
+              With a<sub>p</sub> = 1.0, R<sub>p</sub> = 2.5
+            </p>
+          </label>
+          <label>
+            <Field type="radio" className="mx-2" name={`interiorSchedules[${activeInteriorSchedule}].seismicFpOption`} value="custom" />
+            Use custom nominal F<sub>p</sub> :
+            <Field type="text" className="border border-gray-400 w-16 pr-2 mr-2 text-right ml-2" name={`interiorSchedules[${activeInteriorSchedule}].seismicFpOptionCustomValue`} />
+            W<sub>p</sub>
+          </label>
+
+          {/* Stud Sizes */}
+          <h4 className="mt-4">Stud Sizes:</h4>
+          <label className="hover:bg-blue-200 block ml-8 w-24">
+            <div className="inline-block py-0.5 px-2">
+              <Field type="checkbox" name={`interiorSchedules[${activeInteriorSchedule}].studSizes-162`} />
+              <span className="pl-2">1 5/8"</span>
+            </div>
+          </label>          
+          <label className="hover:bg-blue-200 block ml-8 w-24">
+            <div className="inline-block py-0.5 px-2">
+              <Field type="checkbox" name={`interiorSchedules[${activeInteriorSchedule}].studSizes-250`} />
+              <span className="pl-2">2 1/2"</span>
+            </div>
+          </label>        
+          <label className="hover:bg-blue-200 block ml-8 w-24">
+            <div className="inline-block py-0.5 px-2">
+              <Field type="checkbox" name={`interiorSchedules[${activeInteriorSchedule}].studSizes-362`} />
+              <span className="pl-2">3 5/8"</span>
+            </div>
+          </label>        
+          <label className="hover:bg-blue-200 block ml-8 w-24">
+            <div className="inline-block py-0.5 px-2">
+              <Field type="checkbox" name={`interiorSchedules[${activeInteriorSchedule}].studSizes-400`} />
+              <span className="pl-2">4"</span>
+            </div>
+          </label>        
+          <label className="hover:bg-blue-200 block ml-8 w-24">
+            <div className="inline-block py-0.5 px-2">
+              <Field type="checkbox" name={`interiorSchedules[${activeInteriorSchedule}].studSizes-600`} />
+              <span className="pl-2">6"</span>
+            </div>
+          </label>        
+          <label className="hover:bg-blue-200 block ml-8 w-24">
+            <div className="inline-block py-0.5 px-2">
+              <Field type="checkbox" name={`interiorSchedules[${activeInteriorSchedule}].studSizes-800`} />
+              <span className="pl-2">8"</span>
+            </div>
+          </label>
+
           {/* spacing */}
-          <div>
+          <div className="mt-2">
             <span className="pr-4 w-32 inline-block mb-2">Spacing:</span>
             <Field type="text" className="border border-gray-400 w-12 pr-2 text-right" name={`interiorSchedules[${activeInteriorSchedule}].spacing`} />
             <span className="pl-2">in.</span>
@@ -297,6 +325,38 @@ export const ActiveInteriorScheduleForm = ({ activeInteriorSchedule }) => {
             <Field type="text" className="border border-gray-400 w-12 pr-2 text-right" name={`interiorSchedules[${activeInteriorSchedule}].bracing`} />
             <span className="pl-2">in.</span>
           </div>
+
+        </div>
+
+        {/* column 2 */}
+        <div>
+
+          {/* Design which members */}
+          <h4>Design Type:</h4>
+          <label className="hover:bg-blue-200 ml-8 block w-40">
+            <div className="inline-block py-0.5 px-2">
+              <Field type="checkbox" name={`interiorSchedules[${activeInteriorSchedule}].designType-typicalStuds`} />
+              <span className="pl-2">Typical Studs</span>
+            </div>
+          </label>
+          <label className="hover:bg-blue-200 ml-8 block w-40">
+            <div className="inline-block py-0.5 px-2">
+              <Field type="checkbox" name={`interiorSchedules[${activeInteriorSchedule}].designType-headers`} />
+              <span className="pl-2">Headers</span>
+            </div>
+          </label>
+          <label className="hover:bg-blue-200 ml-8 block w-40">
+            <div className="inline-block py-0.5 px-2">
+              <Field type="checkbox" name={`interiorSchedules[${activeInteriorSchedule}].designType-jambs`} />
+              <span className="pl-2">Jambs</span>
+            </div>
+          </label>
+          <label className="hover:bg-blue-200 ml-8 block w-40">
+            <div className="inline-block py-0.5 px-2">
+              <Field type="checkbox" name={`interiorSchedules[${activeInteriorSchedule}].designType-sills`} />
+              <span className="pl-2">Sills</span>
+            </div>
+          </label>
 
           {/* wall heights */}
           <FieldArray name={`interiorSchedules[${activeInteriorSchedule}][wallHeights]`} render={(wallHeightsArrayHelper) => (
@@ -312,7 +372,7 @@ export const ActiveInteriorScheduleForm = ({ activeInteriorSchedule }) => {
                   (values.interiorSchedules[activeInteriorSchedule].wallHeights.map((wallHeight, wallHeightIndex) => (
                     <>
                       <div className="mb-2">
-                        <Field type="text" className="border border-gray-400 w-12 pr-2 text-right" name={`interiorSchedules[${activeInteriorSchedule}][wallHeights][${wallHeightIndex}].span`} />
+                        <Field type="text" className="border border-gray-400 w-16 pr-2 text-right" name={`interiorSchedules[${activeInteriorSchedule}][wallHeights][${wallHeightIndex}].span`} />
                         <span className="pl-2 inline">ft</span>
                         <button type="button" onClick={() => { wallHeightsArrayHelper.remove(wallHeightIndex) }}>
                           <XIcon className="mx-2 inline h-3 w-3 text-red-400" aria-hidden="true" />
@@ -339,7 +399,7 @@ export const ActiveInteriorScheduleForm = ({ activeInteriorSchedule }) => {
                   (values.interiorSchedules[activeInteriorSchedule].openingWidths.map((openingWidth, openingWidthIndex) => (
                     <>
                       <div className="mb-2">
-                        <Field type="text" className="border border-gray-400 w-12 pr-2 text-right" name={`interiorSchedules[${activeInteriorSchedule}][openingWidths][${openingWidthIndex}].span`} />
+                        <Field type="text" className="border border-gray-400 w-16 pr-2 text-right" name={`interiorSchedules[${activeInteriorSchedule}][openingWidths][${openingWidthIndex}].span`} />
                         <span className="pl-2 inline">ft</span>
                         <button type="button" onClick={() => { openingWidthsArrayHelper.remove(openingWidthIndex) }}>
                           <XIcon className="mx-2 inline h-3 w-3 text-red-400" aria-hidden="true" />
@@ -352,6 +412,7 @@ export const ActiveInteriorScheduleForm = ({ activeInteriorSchedule }) => {
             </>
           )} />
 
+
           {/* header height */}
           <span className="pr-4 w-32 inline-block mb-2">Header Height:</span>
           <Field type="text" className="border border-gray-400 w-12 pr-2 text-right" name={`interiorSchedules[${activeInteriorSchedule}].headerHeight`} />
@@ -363,61 +424,32 @@ export const ActiveInteriorScheduleForm = ({ activeInteriorSchedule }) => {
               <div className="hover:bg-blue-200">
                 <Field type="checkbox" className="mx-2" name={`interiorSchedules[${activeInteriorSchedule}].smallSpanHeaderTrib`} />
                 <span>Small-Span Headers</span>
-                <p className="text-sm mx-6">
+                <p className="mx-7">
                   Design small-span headers (4.25 ft. or less) for dead load from tributary wall height equal to span of header.
                 </p>
               </div>
             </label>
           </div>
-        </div>
 
-        {/* column 2 */}
-        <div>
-
-          {/* show wall assembly properties */}
-          <h4 className="font-semibold">Wall Assembly</h4>
-          <p>Properties were imported from wall assembly definition:</p>
-          <ul className="ml-4">
-            <li>
-              - Dead Weight:
-              <span className="border-b border-b-gray-400 ml-3">
-                {Helpers.sumWallAssemblyParts(values.interiorSchedules[activeInteriorSchedule].wallAssembly)} lbs/sq ft
-              </span>
-            </li>
-            <li>
-              - Uniform Live Load:
-              <span className="border-b border-b-gray-400 ml-3">
-                {values.interiorSchedules[activeInteriorSchedule].wallAssembly.uniformLive} lbs/sq ft
-              </span>
-            </li>
-            <li>
-              - Live Load Deflection Criteria:
-              <span className="border-b border-b-gray-400 ml-3">
-                L/{values.interiorSchedules[activeInteriorSchedule].wallAssembly.deflectionLimit}
-              </span>
-            </li>
-          </ul>
-
-          {/* seismic option */}
-          <h4 className="font-semibold mt-6">Seismic Option</h4>
-          <label className="block">
-            <Field type="radio" className="mx-2" name={`interiorSchedules[${activeInteriorSchedule}].seismicFpOption`} value="max" />Use F<sub>p</sub> for max z/h
-          </label>
-          <label>
-            <Field type="radio" className="mx-2" name={`interiorSchedules[${activeInteriorSchedule}].seismicFpOption`} value="custom" />Use custom nominal F<sub>p</sub> :
-            <Field type="text" className="border border-gray-400 w-16 pr-2 text-right ml-2" name={`interiorSchedules[${activeInteriorSchedule}].seismicFpOptionCustomValue`} />
-          </label>
 
         </div>
       </div>
+
+      <div className="mt-6 text-center">
+        <button type="button" className="py-3 px-10 bg-blue-600 text-slate-100">
+          Run Schedule
+        </button>
+      </div>
+      
     </div>
   )
 }
 
 export const ActiveInteriorScheduleResultsTables = () => {
   return (
-    <p>
-      ActiveInteriorScheduleResultsTables
-    </p>
+    <div className="mt-8">
+      <h3 className="text-xl mb-2">Schedule Results</h3>
+      <p>No results. </p>
+    </div>
   )
 }
