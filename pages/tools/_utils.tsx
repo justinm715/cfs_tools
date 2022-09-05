@@ -7,7 +7,6 @@ import { Field, FieldArray } from "formik"
 import { ChevronDownIcon, PlusSmIcon, XIcon, PlusIcon, PencilIcon } from '@heroicons/react/solid'
 
 import moment from 'moment'
-import * as dfd from "danfojs-node"
 
 import * as Helpers from './_helpers'
 
@@ -216,7 +215,7 @@ export const AddNewInteriorSchedule = ({ wallAssemblies }) => {
 
 
 export const ActiveInteriorScheduleForm = ({ activeInteriorSchedule, designCriteria }) => {
-  
+
   if (activeInteriorSchedule == null) {
     return (
       <div>
@@ -224,12 +223,12 @@ export const ActiveInteriorScheduleForm = ({ activeInteriorSchedule, designCrite
       </div>
     )
   }
-  
+
   const { values, setFieldValue } = useFormikContext();
 
   // where the magic happens
   const RunInteriorSchedule = () => {
-  
+
     // logger for debugging purposes
     const runLogIt = (msg) => {
       let now = moment().format("HH:mm:ss")
@@ -240,7 +239,7 @@ export const ActiveInteriorScheduleForm = ({ activeInteriorSchedule, designCrite
     }
 
     const currSchedule = values.interiorSchedules[activeInteriorSchedule]
-  
+
     // for each stud size
     runLogIt("Getting stud sizes...")
     console.log("RunInteriorSchedule called")
@@ -255,18 +254,11 @@ export const ActiveInteriorScheduleForm = ({ activeInteriorSchedule, designCrite
     currSchedule["studSizes-600"] ? studSizes.push("600") : null
     currSchedule["studSizes-800"] ? studSizes.push("800") : null
     runLogIt("Found stud sizes for " + studSizes)
-    
+
     // for each design type..
 
     // typical studs
-    if (currSchedule['designType-typicalStuds']) {
-      // select studs from the database
-      dfd.readCSV("./data/stud_sections.csv")
-        .then( df => {
-          console.log(df)
-        })
-    }
-  
+
   }
 
 
@@ -419,7 +411,7 @@ export const ActiveInteriorScheduleForm = ({ activeInteriorSchedule, designCrite
                 {(values.interiorSchedules[activeInteriorSchedule].wallHeights && values.interiorSchedules[activeInteriorSchedule].wallHeights.length > 0) ?
                   (values.interiorSchedules[activeInteriorSchedule].wallHeights.map((wallHeight, wallHeightIndex) => (
                     <>
-                      <div className="mb-2">
+                      <div className="mb-2" key={`wallHeight-${wallHeightIndex}`}>
                         <Field type="text" className="border border-gray-400 w-16 pr-2 text-right" name={`interiorSchedules[${activeInteriorSchedule}][wallHeights][${wallHeightIndex}].span`} />
                         <span className="pl-2 inline">ft</span>
                         <button type="button" onClick={() => { wallHeightsArrayHelper.remove(wallHeightIndex) }}>
@@ -446,7 +438,7 @@ export const ActiveInteriorScheduleForm = ({ activeInteriorSchedule, designCrite
                 {(values.interiorSchedules[activeInteriorSchedule].openingWidths && values.interiorSchedules[activeInteriorSchedule].openingWidths.length > 0) ?
                   (values.interiorSchedules[activeInteriorSchedule].openingWidths.map((openingWidth, openingWidthIndex) => (
                     <>
-                      <div className="mb-2">
+                      <div className="mb-2" key={`openingWidth-${openingWidthIndex}`}>
                         <Field type="text" className="border border-gray-400 w-16 pr-2 text-right" name={`interiorSchedules[${activeInteriorSchedule}][openingWidths][${openingWidthIndex}].span`} />
                         <span className="pl-2 inline">ft</span>
                         <button type="button" onClick={() => { openingWidthsArrayHelper.remove(openingWidthIndex) }}>
